@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="SistemaReservas.Desktop/SistemaReservas.Desktop.csproj" />
   <Project Path="SistemaReservas/SistemaReservas.csproj" />
 </Solution>
