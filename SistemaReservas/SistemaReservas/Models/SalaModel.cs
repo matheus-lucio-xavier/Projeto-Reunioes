@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace SistemaReservas.Models
 {
-    public class Sala
+    public class SalaModel
     {
         [Required]
-        public Guid Id { get; set; }
+        public long Id { get; set; }
         [Required]
         [StringLength(80)]
         [RegularExpression("^[a-zA-Z]+$")]

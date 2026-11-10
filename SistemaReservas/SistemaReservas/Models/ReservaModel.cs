@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace SistemaReservas.Models
 {
-    public class Reserva
+    public class ReservaModel
     {
         [Required]
-        public Guid Id { get; set; }
+        public long Id { get; set; }
         [Required]
         public DateTime Inicio { get; set; }
         [Required]
         public DateTime Fim { get; set; }
         [Required]
-        public Guid Sala { get; set; }
+        public long SalaId { get; set; }
     }
 }
