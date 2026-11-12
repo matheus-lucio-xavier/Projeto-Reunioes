@@ -12,6 +12,8 @@ namespace SistemaReservas.Models
         [Required]
         public long Id { get; set; }
         [Required]
+        public string Nome { get; set; } = String.Empty;
+        [Required]
         public DateTime Inicio { get; set; }
         [Required]
         public DateTime Fim { get; set; }

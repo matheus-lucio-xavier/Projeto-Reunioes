@@ -20,7 +20,8 @@ namespace SistemaReservas.Services
 
         public List<ReservaModel> Consultar()
         {
-            var resultado = _repository.Consultar<ReservaModel>();
+            var resultado = _repository.Consultar<ReservaModel>()
+                .OrderBy(r => r.Inicio);
 
             return resultado.ToList();
         }
@@ -41,13 +42,6 @@ namespace SistemaReservas.Services
             {
                 return false;
             }
-
-            return _repository.Editar(reserva);
-        }
-
-        public bool Cancelar(ReservaModel reserva)
-        {
-            reserva.Status = ReservaStatusEnum.CANCELADA;
 
             return _repository.Editar(reserva);
         }

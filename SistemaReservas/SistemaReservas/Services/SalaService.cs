@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using SistemaReservas.Dto.Response;
+using SistemaReservas.Enums;
 using SistemaReservas.Models;
 using SistemaReservas.Repositories;
 
@@ -18,20 +21,59 @@ namespace SistemaReservas.Services
             _repository = repository;
         }
 
-        public List<SalaModel> Consultar()
+        public List<ResponseSalaDto> Consultar(int page, int pageSize = 10)
         {
-            var resultado = _repository.Consultar<SalaModel>()
-                .OrderBy(x => x.Andar);
 
-            return resultado.ToList();
+            var salas = _repository.Consultar<SalaModel>()
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .OrderBy(x => x.Andar);
+            var reservas = _repository.Consultar<ReservaModel>()
+                .Where(r => 
+                    r.Inicio < DateTime.Today &&
+                    r.Fim > DateTime.Today.AddDays(-7) &&
+                    r.Status != ReservaStatusEnum.CANCELADA);
+
+            var resultado = salas.Select(s =>
+                new ResponseSalaDto
+                {
+                    Id = s.Id,
+                    Nome = s.Nome,
+                    Andar = s.Andar,
+                    qtdAssentos = s.qtdAssentos,
+                    HorasLivres = (7 * 11) - reservas.Where(r => r.SalaId == s.Id).Sum(r => (r.Fim - r.Inicio).TotalMinutes) / 60,
+                    ReunioesAgendadas = reservas.Where(r => r.SalaId == s.Id).Count()
+                }
+            ).ToList();
+
+            return resultado;
         }
-        public List<SalaModel> Consultar(string pesquisa)
+        public List<ResponseSalaDto> Consultar(string pesquisa, int page, int pageSize = 10)
         {
-            var resultado = _repository.Consultar<SalaModel>()
+            var salas = _repository.Consultar<SalaModel>()
                 .Where((sala) => sala.Nome.Contains(pesquisa))
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .OrderBy(x => x.Andar);
+            var reservas = _repository.Consultar<ReservaModel>()
+                .Where(r => 
+                    r.Inicio < DateTime.Today &&
+                    r.Fim > DateTime.Today.AddDays(-7) &&
+                    r.Status != ReservaStatusEnum.CANCELADA);
 
-            return resultado.ToList();
+            var resultado = salas.Select(s =>
+                new ResponseSalaDto
+                {
+                    Id = s.Id,
+                    Nome = s.Nome,
+                    Andar = s.Andar,
+                    qtdAssentos = s.qtdAssentos,
+                    HorasLivres = (7 * 11) - reservas.Where(r => r.SalaId == s.Id).Sum(r => (r.Fim - r.Inicio).TotalMinutes) / 60,
+                    ReunioesAgendadas = reservas.Where(r => r.SalaId == s.Id).Count()
+                }
+            ).ToList();
+
+            return resultado;
         }
 
         public bool Criar(SalaModel sala, out List<ValidationResult> erros)
@@ -56,6 +98,11 @@ namespace SistemaReservas.Services
 
         public bool Deletar(SalaModel sala)
         {
+            if (sala.status == SalaStatusEnum.ATIVA)
+            {
+                sala.status = SalaStatusEnum.INATIVA;
+                return _repository.Editar(sala);
+            }
             return _repository.Excluir(sala);
         }
 
