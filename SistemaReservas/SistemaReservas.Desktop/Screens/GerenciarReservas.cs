@@ -1,4 +1,5 @@
 ﻿using SistemaReservas.Dto.Response;
+using SistemaReservas.Enums;
 using SistemaReservas.Models;
 using SistemaReservas.Services;
 using System;
@@ -45,6 +46,7 @@ namespace SistemaReservas.Desktop.Screens
             foreach (var reserva in lista)
             {
                 dataGridView1.Rows.Add(
+                    reserva.Id,
                     reserva.Nome,
                     reserva.Inicio,
                     reserva.Fim,
@@ -113,6 +115,67 @@ namespace SistemaReservas.Desktop.Screens
             if (page > 1)
             {
                 maskedTextBox1.Text = (page - 1).ToString();
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var selectedReservaId = dataGridView1.SelectedRows[0].Cells["Id"].Value;
+            if (selectedReservaId == null)
+            {
+                MessageBox.Show("Selecione uma reserva para Cancelar.", "Input Invalido",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var selectedReserva = _service.ConsultarPorId((long)selectedReservaId);
+
+            if (selectedReserva == null)
+            {
+                MessageBox.Show("Reserva Invalida.", "Input Invalido",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (selectedReserva.Status == ReservaStatusEnum.CANCELADA)
+            {
+                MessageBox.Show("Não é possível cancelar uma reserva que já está cancelada.", "Input Invalido",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (MessageBox.Show("Tem certeza que deseja Cancelar esta reserva?", "Confirmar Cancelamento", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                selectedReserva.Inicio = selectedReserva.Inicio.ToUniversalTime();
+                selectedReserva.Fim = selectedReserva.Fim.ToUniversalTime();
+                _service.Deletar(selectedReserva);
+                CarregarDados();
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var selectedReservaId = dataGridView1.SelectedRows[0].Cells["Id"].Value;
+            if (selectedReservaId == null)
+            {
+                MessageBox.Show("Selecione uma reserva para editar.", "Input Invalido",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var selectedReserva = _service.ConsultarPorId((long)selectedReservaId);
+
+            if (selectedReserva == null)
+            {
+                MessageBox.Show("Reserva Invalida.", "Input Invalido",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var editarReserva = new CadastroReserva(_service, _salaService, selectedReserva);
+            if (editarReserva.ShowDialog() == DialogResult.OK)
+            {
+                CarregarDados();
             }
         }
     }

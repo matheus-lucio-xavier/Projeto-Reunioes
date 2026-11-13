@@ -31,6 +31,7 @@
             button1 = new Button();
             label1 = new Label();
             dataGridView1 = new DataGridView();
+            Id = new DataGridViewTextBoxColumn();
             Nome = new DataGridViewTextBoxColumn();
             Inicio = new DataGridViewTextBoxColumn();
             Fim = new DataGridViewTextBoxColumn();
@@ -75,13 +76,22 @@
             dataGridView1.BackgroundColor = SystemColors.Control;
             dataGridView1.BorderStyle = BorderStyle.None;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Nome, Inicio, Fim, Sala, Status });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Id, Nome, Inicio, Fim, Sala, Status });
             dataGridView1.Location = new Point(139, 75);
+            dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
+            dataGridView1.RowHeadersVisible = false;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dataGridView1.Size = new Size(543, 320);
+            dataGridView1.Size = new Size(555, 320);
             dataGridView1.TabIndex = 3;
+            // 
+            // Id
+            // 
+            Id.HeaderText = "Id";
+            Id.Name = "Id";
+            Id.ReadOnly = true;
+            Id.Width = 50;
             // 
             // Nome
             // 
@@ -150,6 +160,7 @@
             button4.TabIndex = 10;
             button4.Text = "Editar Reserva";
             button4.UseVisualStyleBackColor = false;
+            button4.Click += button4_Click;
             // 
             // button3
             // 
@@ -160,6 +171,7 @@
             button3.TabIndex = 9;
             button3.Text = "Cancelar Reserva";
             button3.UseVisualStyleBackColor = false;
+            button3.Click += button3_Click;
             // 
             // button6
             // 
@@ -224,6 +236,7 @@
         private Button button6;
         private Button button5;
         private MaskedTextBox maskedTextBox1;
+        private DataGridViewTextBoxColumn Id;
         private DataGridViewTextBoxColumn Nome;
         private DataGridViewTextBoxColumn Inicio;
         private DataGridViewTextBoxColumn Fim;

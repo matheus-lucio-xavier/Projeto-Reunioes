@@ -31,11 +31,13 @@ namespace SistemaReservas.Services
 
             var salas = page != 0 ?
                 _repository.Consultar<SalaModel>()
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .OrderBy(x => x.Andar) :
+                    .Where(s => s.Status == SalaStatusEnum.ATIVA)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .OrderBy(x => x.Andar) :
                 _repository.Consultar<SalaModel>()
-                .OrderBy(x => x.Andar);
+                    .Where(s => s.Status == SalaStatusEnum.ATIVA)
+                    .OrderBy(x => x.Andar);
 
             var reservas = _repository.Consultar<ReservaModel>()
                 .Where(r => 
@@ -50,7 +52,7 @@ namespace SistemaReservas.Services
                     Nome = s.Nome,
                     Andar = s.Andar,
                     qtdAssentos = s.qtdAssentos,
-                    HorasLivres = (7 * 11) - reservas.Where(r => r.SalaId == s.Id).Sum(r => (r.Fim - r.Inicio).TotalMinutes) / 60,
+                    HorasLivres = Math.Round((7 * 11) - reservas.Where(r => r.SalaId == s.Id).Sum(r => (r.Fim - r.Inicio).TotalMinutes) / 60, 2),
                     ReunioesAgendadas = reservas.Where(r => r.SalaId == s.Id).Count()
                 }
             ).ToList();
@@ -61,13 +63,13 @@ namespace SistemaReservas.Services
         {
             var salas = page != 0 ?
                 _repository.Consultar<SalaModel>()
-                .Where(s => s.Nome.Contains(pesquisa))
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .OrderBy(x => x.Andar) :
+                    .Where(s => s.Nome.Contains(pesquisa) && s.Status == SalaStatusEnum.ATIVA)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .OrderBy(x => x.Andar) :
                 _repository.Consultar<SalaModel>()
-                .Where(s => s.Nome.Contains(pesquisa))
-                .OrderBy(x => x.Andar);
+                    .Where(s => s.Nome.Contains(pesquisa) && s.Status == SalaStatusEnum.ATIVA)
+                    .OrderBy(x => x.Andar);
 
 
             var reservas = _repository.Consultar<ReservaModel>()
@@ -91,33 +93,14 @@ namespace SistemaReservas.Services
             return resultado;
         }
 
-        public ResponseSalaDto? ConsultarPorId(long id)
+        public SalaModel? ConsultarPorId(long id)
         {
-            var sala = _repository.ConsultarPorId<SalaModel>(id);
+            var resultado = _repository.ConsultarPorId<SalaModel>(id);
 
-            if (sala == null)
+            if (resultado == null)
             {
                 return null;
             }
-
-            var reservas = _repository.Consultar<ReservaModel>()
-                .Where(r =>
-                    r.SalaId == id &&
-                    r.Inicio < DateTime.Today.ToUniversalTime() &&
-                    r.Fim > DateTime.Today.AddDays(-7).ToUniversalTime() &&
-                    r.Status != ReservaStatusEnum.CANCELADA);
-
-            var resultado =
-                new ResponseSalaDto
-                {
-                    Id = sala.Id,
-                    Nome = sala.Nome,
-                    Andar = sala.Andar,
-                    qtdAssentos = sala.qtdAssentos,
-                    HorasLivres = (7 * 11) - reservas.Where(r => r.SalaId == sala.Id).Sum(r => (r.Fim - r.Inicio).TotalMinutes) / 60,
-                    ReunioesAgendadas = reservas.Where(r => r.SalaId == sala.Id).Count()
-                }
-;
 
             return resultado;
         }

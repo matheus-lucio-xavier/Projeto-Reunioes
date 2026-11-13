@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             dataGridView1 = new DataGridView();
+            Id = new DataGridViewTextBoxColumn();
             Nome = new DataGridViewTextBoxColumn();
             Andar = new DataGridViewTextBoxColumn();
             QuantidadeAssentos = new DataGridViewTextBoxColumn();
@@ -53,13 +54,22 @@
             dataGridView1.BackgroundColor = SystemColors.Control;
             dataGridView1.BorderStyle = BorderStyle.None;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Nome, Andar, QuantidadeAssentos, HorasLivres, ReunioesAgendadas });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { Id, Nome, Andar, QuantidadeAssentos, HorasLivres, ReunioesAgendadas });
             dataGridView1.Location = new Point(32, 65);
+            dataGridView1.MultiSelect = false;
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
+            dataGridView1.RowHeadersVisible = false;
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(743, 320);
             dataGridView1.TabIndex = 0;
+            // 
+            // Id
+            // 
+            Id.HeaderText = "Id";
+            Id.Name = "Id";
+            Id.ReadOnly = true;
+            Id.Width = 50;
             // 
             // Nome
             // 
@@ -86,7 +96,7 @@
             QuantidadeAssentos.ReadOnly = true;
             QuantidadeAssentos.Resizable = DataGridViewTriState.False;
             QuantidadeAssentos.SortMode = DataGridViewColumnSortMode.NotSortable;
-            QuantidadeAssentos.Width = 175;
+            QuantidadeAssentos.Width = 150;
             // 
             // HorasLivres
             // 
@@ -154,6 +164,7 @@
             button3.TabIndex = 5;
             button3.Text = "Excluir Sala";
             button3.UseVisualStyleBackColor = false;
+            button3.Click += button3_Click;
             // 
             // button4
             // 
@@ -164,6 +175,7 @@
             button4.TabIndex = 6;
             button4.Text = "Editar Sala";
             button4.UseVisualStyleBackColor = false;
+            button4.Click += button4_Click;
             // 
             // button5
             // 
@@ -228,6 +240,7 @@
         private Button button5;
         private Button button6;
         private MaskedTextBox maskedTextBox1;
+        private DataGridViewTextBoxColumn Id;
         private DataGridViewTextBoxColumn Nome;
         private DataGridViewTextBoxColumn Andar;
         private DataGridViewTextBoxColumn QuantidadeAssentos;

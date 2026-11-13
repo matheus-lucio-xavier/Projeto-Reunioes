@@ -1,4 +1,5 @@
 ﻿using SistemaReservas.Dto.Response;
+using SistemaReservas.Enums;
 using SistemaReservas.Models;
 using SistemaReservas.Services;
 using System;
@@ -39,6 +40,7 @@ namespace SistemaReservas.Desktop.Screens
             foreach (var sala in lista)
             {
                 dataGridView1.Rows.Add(
+                    sala.Id,
                     sala.Nome,
                     sala.Andar,
                     sala.qtdAssentos,
@@ -99,6 +101,58 @@ namespace SistemaReservas.Desktop.Screens
             if (page > 1)
             {
                 maskedTextBox1.Text = (page - 1).ToString();
+            }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            var selectedSalaId = dataGridView1.SelectedRows[0].Cells["Id"].Value;
+            if (selectedSalaId == null)
+            {
+                MessageBox.Show("Selecione uma sala para editar.", "Input Invalido",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var selectedSala = _service.ConsultarPorId((long)selectedSalaId);
+
+            if (selectedSala == null)
+            {
+                MessageBox.Show("Sala Invalida.", "Input Invalido",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var editarSala = new CadastroSala(_service, selectedSala);
+            if (editarSala.ShowDialog() == DialogResult.OK)
+            {
+                CarregarDados();
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            var selectedSalaId = dataGridView1.SelectedRows[0].Cells["Id"].Value;
+            if (selectedSalaId == null)
+            {
+                MessageBox.Show("Selecione uma sala para Excluir.", "Input Invalido",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            var selectedSala = _service.ConsultarPorId((long)selectedSalaId);
+
+            if (selectedSala == null)
+            {
+                MessageBox.Show("Sala Invalida.", "Input Invalido",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (MessageBox.Show("Tem certeza que deseja excluir esta sala?", "Confirmar Exclusão", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+            {
+                _service.Deletar(selectedSala);
+                CarregarDados();
             }
         }
     }

@@ -53,7 +53,7 @@ namespace SistemaReservas.Services
             return resultado.ToList();
         }
 
-        public ReservaModel? ConsultarPorId(int id)
+        public ReservaModel? ConsultarPorId(long id)
         {
             var reserva = _repository.ConsultarPorId<ReservaModel>(id);
             if (reserva == null)
@@ -86,6 +86,11 @@ namespace SistemaReservas.Services
 
         public bool Deletar(ReservaModel reserva)
         {
+            if (reserva.Status == ReservaStatusEnum.ATIVA)
+            {
+                reserva.Status = ReservaStatusEnum.CANCELADA;
+                return _repository.Editar(reserva);
+            }
             return _repository.Excluir(reserva);
         }
 
