@@ -18,6 +18,6 @@ namespace SistemaReservas.Models
         [Required]
         [Range(1, 100)]
         public int qtdAssentos { get; set; }
-        public SalaStatusEnum status { get; set; }
+        public SalaStatusEnum Status { get; set; }
     }
 }

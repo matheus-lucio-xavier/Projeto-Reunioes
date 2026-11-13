@@ -30,8 +30,8 @@ namespace SistemaReservas.Services
                 .OrderBy(x => x.Andar);
             var reservas = _repository.Consultar<ReservaModel>()
                 .Where(r => 
-                    r.Inicio < DateTime.Today &&
-                    r.Fim > DateTime.Today.AddDays(-7) &&
+                    r.Inicio < DateTime.Today.ToUniversalTime() &&
+                    r.Fim > DateTime.Today.AddDays(-7).ToUniversalTime() &&
                     r.Status != ReservaStatusEnum.CANCELADA);
 
             var resultado = salas.Select(s =>
@@ -57,8 +57,8 @@ namespace SistemaReservas.Services
                 .OrderBy(x => x.Andar);
             var reservas = _repository.Consultar<ReservaModel>()
                 .Where(r => 
-                    r.Inicio < DateTime.Today &&
-                    r.Fim > DateTime.Today.AddDays(-7) &&
+                    r.Inicio < DateTime.Today.ToUniversalTime() &&
+                    r.Fim > DateTime.Today.AddDays(-7).ToUniversalTime() &&
                     r.Status != ReservaStatusEnum.CANCELADA);
 
             var resultado = salas.Select(s =>
@@ -98,9 +98,9 @@ namespace SistemaReservas.Services
 
         public bool Deletar(SalaModel sala)
         {
-            if (sala.status == SalaStatusEnum.ATIVA)
+            if (sala.Status == SalaStatusEnum.ATIVA)
             {
-                sala.status = SalaStatusEnum.INATIVA;
+                sala.Status = SalaStatusEnum.INATIVA;
                 return _repository.Editar(sala);
             }
             return _repository.Excluir(sala);
