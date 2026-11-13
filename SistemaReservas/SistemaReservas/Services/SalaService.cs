@@ -100,6 +100,12 @@ namespace SistemaReservas.Services
         {
             if (sala.Status == SalaStatusEnum.ATIVA)
             {
+                foreach(var r in _repository.Consultar<ReservaModel>().Where(r => r.SalaId == sala.Id && r.Status != ReservaStatusEnum.CANCELADA))
+                {
+                    r.Status = ReservaStatusEnum.CANCELADA;
+                    return _repository.Editar(r);
+                }
+
                 sala.Status = SalaStatusEnum.INATIVA;
                 return _repository.Editar(sala);
             }

@@ -14,9 +14,10 @@ namespace SistemaReservas.Models
         [Required]
         public string Nome { get; set; } = String.Empty;
         [Required]
+        [Range(1, int.MaxValue)]
         public int Andar { get; set; }
         [Required]
-        [Range(1, 100)]
+        [Range(1, int.MaxValue)]
         public int qtdAssentos { get; set; }
         public SalaStatusEnum Status { get; set; }
     }
