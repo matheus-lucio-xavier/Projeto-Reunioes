@@ -12,6 +12,9 @@ namespace SistemaReservas.Contexts
     {
 
         private string _connectionString = "Server=localhost;Port=5432;Database=SistemaReservas;User Id=postgres;Password=8643;"; // substituir de acordo com a maquina
+
+        public AppDbContext()
+        { }
         public AppDbContext(DbContextOptions opt) : base(opt)
         {}
 

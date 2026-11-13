@@ -33,11 +33,11 @@
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
-            numericUpDown2 = new NumericUpDown();
-            numericUpDown1 = new NumericUpDown();
-            textBox1 = new TextBox();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
+            numericQtdAssentos = new NumericUpDown();
+            numericAndar = new NumericUpDown();
+            textNome = new TextBox();
+            ((System.ComponentModel.ISupportInitialize)numericQtdAssentos).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)numericAndar).BeginInit();
             SuspendLayout();
             // 
             // button2
@@ -50,6 +50,7 @@
             button2.TabIndex = 15;
             button2.Text = "Cadastrar";
             button2.UseVisualStyleBackColor = false;
+            button2.Click += button2_Click;
             // 
             // button1
             // 
@@ -88,28 +89,28 @@
             label1.TabIndex = 11;
             label1.Text = "Quantidade de Assentos";
             // 
-            // numericUpDown2
+            // numericQtdAssentos
             // 
-            numericUpDown2.Location = new Point(219, 246);
-            numericUpDown2.Name = "numericUpDown2";
-            numericUpDown2.Size = new Size(362, 23);
-            numericUpDown2.TabIndex = 10;
-            numericUpDown2.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numericQtdAssentos.Location = new Point(219, 246);
+            numericQtdAssentos.Name = "numericQtdAssentos";
+            numericQtdAssentos.Size = new Size(362, 23);
+            numericQtdAssentos.TabIndex = 10;
+            numericQtdAssentos.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
-            // numericUpDown1
+            // numericAndar
             // 
-            numericUpDown1.Location = new Point(219, 190);
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(362, 23);
-            numericUpDown1.TabIndex = 9;
-            numericUpDown1.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            numericAndar.Location = new Point(219, 190);
+            numericAndar.Name = "numericAndar";
+            numericAndar.Size = new Size(362, 23);
+            numericAndar.TabIndex = 9;
+            numericAndar.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
-            // textBox1
+            // textNome
             // 
-            textBox1.Location = new Point(219, 128);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(362, 23);
-            textBox1.TabIndex = 8;
+            textNome.Location = new Point(219, 128);
+            textNome.Name = "textNome";
+            textNome.Size = new Size(362, 23);
+            textNome.TabIndex = 8;
             // 
             // CadastroSala
             // 
@@ -121,13 +122,13 @@
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(numericUpDown2);
-            Controls.Add(numericUpDown1);
-            Controls.Add(textBox1);
+            Controls.Add(numericQtdAssentos);
+            Controls.Add(numericAndar);
+            Controls.Add(textNome);
             Name = "CadastroSala";
             Text = "CadastroSala";
-            ((System.ComponentModel.ISupportInitialize)numericUpDown2).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericQtdAssentos).EndInit();
+            ((System.ComponentModel.ISupportInitialize)numericAndar).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -139,8 +140,8 @@
         private Label label3;
         private Label label2;
         private Label label1;
-        private NumericUpDown numericUpDown2;
-        private NumericUpDown numericUpDown1;
-        private TextBox textBox1;
+        private NumericUpDown numericQtdAssentos;
+        private NumericUpDown numericAndar;
+        private TextBox textNome;
     }
 }

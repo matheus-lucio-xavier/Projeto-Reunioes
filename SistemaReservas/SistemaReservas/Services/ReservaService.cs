@@ -1,11 +1,13 @@
+using SistemaReservas.Contexts;
+using SistemaReservas.Enums;
+using SistemaReservas.Models;
+using SistemaReservas.Repositories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using SistemaReservas.Enums;
-using SistemaReservas.Models;
-using SistemaReservas.Repositories;
 
 namespace SistemaReservas.Services
 {
@@ -13,17 +15,53 @@ namespace SistemaReservas.Services
     {
         private readonly Repository _repository;
 
+        public ReservaService()
+        {
+            _repository = new Repository(new AppDbContext());
+        }
+
         public ReservaService(Repository repository)
         {
             _repository = repository;
         }
 
-        public List<ReservaModel> Consultar()
+        public List<ReservaModel> Consultar(int page = 0, int pageSize = 10)
         {
-            var resultado = _repository.Consultar<ReservaModel>()
+            var resultado = page != 0 ?
+                _repository.Consultar<ReservaModel>()
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .OrderBy(r => r.Inicio) :
+                _repository.Consultar<ReservaModel>()
                 .OrderBy(r => r.Inicio);
 
             return resultado.ToList();
+        }
+
+        public List<ReservaModel> Consultar(string pesquisa, int page = 0, int pageSize = 10)
+        {
+            var resultado = page != 0 ?
+                _repository.Consultar<ReservaModel>()
+                .Where(r => r.Nome.Contains(pesquisa))
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .OrderBy(r => r.Inicio) :
+                _repository.Consultar<ReservaModel>()
+                .Where(r => r.Nome.Contains(pesquisa))
+                .OrderBy(r => r.Inicio);
+
+            return resultado.ToList();
+        }
+
+        public ReservaModel? ConsultarPorId(int id)
+        {
+            var reserva = _repository.ConsultarPorId<ReservaModel>(id);
+            if (reserva == null)
+            {
+                return null;
+            }
+
+            return reserva;
         }
 
         public bool Criar(ReservaModel reserva, out List<ValidationResult> erros)

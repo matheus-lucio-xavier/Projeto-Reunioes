@@ -33,11 +33,11 @@
             label3 = new Label();
             label2 = new Label();
             label1 = new Label();
-            textBox1 = new TextBox();
-            dateTimePicker1 = new DateTimePicker();
-            dateTimePicker2 = new DateTimePicker();
+            textNome = new TextBox();
+            dateTimeInicio = new DateTimePicker();
+            dateTimeFim = new DateTimePicker();
             label4 = new Label();
-            listBox1 = new ListBox();
+            listBoxSala = new ListBox();
             SuspendLayout();
             // 
             // button2
@@ -50,6 +50,7 @@
             button2.TabIndex = 15;
             button2.Text = "Cadastrar";
             button2.UseVisualStyleBackColor = false;
+            button2.Click += button2_Click;
             // 
             // button1
             // 
@@ -88,32 +89,32 @@
             label1.TabIndex = 11;
             label1.Text = "Fim";
             // 
-            // textBox1
+            // textNome
             // 
-            textBox1.Location = new Point(219, 128);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(362, 23);
-            textBox1.TabIndex = 8;
+            textNome.Location = new Point(219, 128);
+            textNome.Name = "textNome";
+            textNome.Size = new Size(362, 23);
+            textNome.TabIndex = 8;
             // 
-            // dateTimePicker1
+            // dateTimeInicio
             // 
-            dateTimePicker1.Format = DateTimePickerFormat.Custom;
-            dateTimePicker1.CustomFormat = "dd/MM/yyyy HH:mm";
-            dateTimePicker1.Location = new Point(219, 190);
-            dateTimePicker1.Name = "dateTimePicker1";
-            dateTimePicker1.Size = new Size(362, 23);
-            dateTimePicker1.TabIndex = 16;
-            dateTimePicker1.Value = new DateTime(2026, 11, 13, 12, 50, 56, 0);
+            dateTimeInicio.CustomFormat = "dd/MM/yyyy HH:mm";
+            dateTimeInicio.Format = DateTimePickerFormat.Custom;
+            dateTimeInicio.Location = new Point(219, 190);
+            dateTimeInicio.Name = "dateTimeInicio";
+            dateTimeInicio.Size = new Size(362, 23);
+            dateTimeInicio.TabIndex = 16;
+            dateTimeInicio.Value = new DateTime(2026, 11, 13, 12, 50, 56, 0);
             // 
-            // dateTimePicker2
+            // dateTimeFim
             // 
-            dateTimePicker2.Format = DateTimePickerFormat.Custom;
-            dateTimePicker2.CustomFormat = "dd/MM/yyyy HH:mm";
-            dateTimePicker2.Location = new Point(219, 246);
-            dateTimePicker2.Name = "dateTimePicker2";
-            dateTimePicker2.Size = new Size(362, 23);
-            dateTimePicker2.TabIndex = 17;
-            dateTimePicker2.Value = new DateTime(2026, 11, 13, 12, 35, 37, 0);
+            dateTimeFim.CustomFormat = "dd/MM/yyyy HH:mm";
+            dateTimeFim.Format = DateTimePickerFormat.Custom;
+            dateTimeFim.Location = new Point(219, 246);
+            dateTimeFim.Name = "dateTimeFim";
+            dateTimeFim.Size = new Size(362, 23);
+            dateTimeFim.TabIndex = 17;
+            dateTimeFim.Value = new DateTime(2026, 11, 13, 12, 35, 37, 0);
             // 
             // label4
             // 
@@ -124,29 +125,29 @@
             label4.TabIndex = 18;
             label4.Text = "Sala";
             // 
-            // listBox1
+            // listBoxSala
             // 
-            listBox1.FormattingEnabled = true;
-            listBox1.Location = new Point(219, 302);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(362, 19);
-            listBox1.TabIndex = 19;
+            listBoxSala.FormattingEnabled = true;
+            listBoxSala.Location = new Point(219, 302);
+            listBoxSala.Name = "listBoxSala";
+            listBoxSala.Size = new Size(362, 19);
+            listBoxSala.TabIndex = 19;
             // 
             // CadastroReserva
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(listBox1);
+            Controls.Add(listBoxSala);
             Controls.Add(label4);
-            Controls.Add(dateTimePicker2);
-            Controls.Add(dateTimePicker1);
+            Controls.Add(dateTimeFim);
+            Controls.Add(dateTimeInicio);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(label3);
             Controls.Add(label2);
             Controls.Add(label1);
-            Controls.Add(textBox1);
+            Controls.Add(textNome);
             Name = "CadastroReserva";
             Text = "CadastroReserva";
             ResumeLayout(false);
@@ -160,10 +161,10 @@
         private Label label3;
         private Label label2;
         private Label label1;
-        private TextBox textBox1;
-        private DateTimePicker dateTimePicker1;
-        private DateTimePicker dateTimePicker2;
+        private TextBox textNome;
+        private DateTimePicker dateTimeInicio;
+        private DateTimePicker dateTimeFim;
         private Label label4;
-        private ListBox listBox1;
+        private ListBox listBoxSala;
     }
 }
