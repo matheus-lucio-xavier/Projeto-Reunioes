@@ -55,7 +55,7 @@
             button2.TabIndex = 1;
             button2.Text = "Gerenciar Reservas";
             button2.UseVisualStyleBackColor = false;
-            button2.Click += this.button2_Click;
+            button2.Click += button2_Click;
             // 
             // label1
             // 
@@ -88,6 +88,7 @@
             Controls.Add(button1);
             Name = "MainMenu";
             Text = "Menu Principal";
+            Load += MainMenu_Load;
             ResumeLayout(false);
             PerformLayout();
         }

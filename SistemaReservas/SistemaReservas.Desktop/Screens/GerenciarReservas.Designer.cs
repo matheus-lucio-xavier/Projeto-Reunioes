@@ -37,7 +37,6 @@
             Fim = new DataGridViewTextBoxColumn();
             Sala = new DataGridViewTextBoxColumn();
             Status = new DataGridViewTextBoxColumn();
-            button2 = new Button();
             textBox1 = new TextBox();
             button4 = new Button();
             button3 = new Button();
@@ -133,23 +132,13 @@
             Status.Resizable = DataGridViewTriState.False;
             Status.SortMode = DataGridViewColumnSortMode.NotSortable;
             // 
-            // button2
-            // 
-            button2.Location = new Point(547, 46);
-            button2.Name = "button2";
-            button2.Size = new Size(75, 23);
-            button2.TabIndex = 7;
-            button2.Text = "Pesquisa";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
-            // 
             // textBox1
             // 
             textBox1.Location = new Point(207, 46);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(334, 23);
+            textBox1.Size = new Size(396, 23);
             textBox1.TabIndex = 8;
-            textBox1.Text = "\r\n";
+            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // button4
             // 
@@ -213,7 +202,6 @@
             Controls.Add(button4);
             Controls.Add(button3);
             Controls.Add(textBox1);
-            Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(label1);
             Controls.Add(dataGridView1);
@@ -229,7 +217,6 @@
         private Button button1;
         private Label label1;
         private DataGridView dataGridView1;
-        private Button button2;
         private TextBox textBox1;
         private Button button4;
         private Button button3;

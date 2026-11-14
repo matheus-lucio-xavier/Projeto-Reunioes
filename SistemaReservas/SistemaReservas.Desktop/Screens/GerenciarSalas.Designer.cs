@@ -38,7 +38,6 @@
             label1 = new Label();
             button1 = new Button();
             textBox1 = new TextBox();
-            button2 = new Button();
             button3 = new Button();
             button4 = new Button();
             button5 = new Button();
@@ -141,19 +140,9 @@
             // 
             textBox1.Location = new Point(192, 36);
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(334, 23);
+            textBox1.Size = new Size(415, 23);
             textBox1.TabIndex = 3;
-            textBox1.Text = "\r\n";
-            // 
-            // button2
-            // 
-            button2.Location = new Point(532, 36);
-            button2.Name = "button2";
-            button2.Size = new Size(75, 23);
-            button2.TabIndex = 4;
-            button2.Text = "Pesquisa";
-            button2.UseVisualStyleBackColor = true;
-            button2.Click += button2_Click;
+            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // button3
             // 
@@ -216,7 +205,6 @@
             Controls.Add(button5);
             Controls.Add(button4);
             Controls.Add(button3);
-            Controls.Add(button2);
             Controls.Add(textBox1);
             Controls.Add(button1);
             Controls.Add(label1);
@@ -234,7 +222,6 @@
         private Label label1;
         private Button button1;
         private TextBox textBox1;
-        private Button button2;
         private Button button3;
         private Button button4;
         private Button button5;

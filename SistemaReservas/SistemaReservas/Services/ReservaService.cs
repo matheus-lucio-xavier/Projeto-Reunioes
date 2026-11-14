@@ -29,9 +29,9 @@ namespace SistemaReservas.Services
         {
             var resultado = page != 0 ?
                 _repository.Consultar<ReservaModel>()
+                .OrderBy(r => r.Inicio)
                 .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .OrderBy(r => r.Inicio) :
+                .Take(pageSize) :
                 _repository.Consultar<ReservaModel>()
                 .OrderBy(r => r.Inicio);
 
@@ -43,9 +43,9 @@ namespace SistemaReservas.Services
             var resultado = page != 0 ?
                 _repository.Consultar<ReservaModel>()
                 .Where(r => r.Nome.Contains(pesquisa))
+                .OrderBy(r => r.Inicio)
                 .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .OrderBy(r => r.Inicio) :
+                .Take(pageSize) :
                 _repository.Consultar<ReservaModel>()
                 .Where(r => r.Nome.Contains(pesquisa))
                 .OrderBy(r => r.Inicio);

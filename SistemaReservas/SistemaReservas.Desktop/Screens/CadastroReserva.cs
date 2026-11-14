@@ -21,6 +21,9 @@ namespace SistemaReservas.Desktop.Screens
             _service = service;
             _salaService = salaService;
             CarregarListaSalas();
+
+            dateTimeInicio.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
+            dateTimeFim.Value = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0);
         }
 
         public CadastroReserva(ReservaService service, SalaService salaService, ReservaModel reserva)
@@ -36,7 +39,19 @@ namespace SistemaReservas.Desktop.Screens
             textNome.Text = reserva.Nome;
             dateTimeInicio.Value = reserva.Inicio;
             dateTimeFim.Value = reserva.Fim;
-            listBoxSala.SelectedValue = reserva.SalaId;
+            comboBoxSala.SelectedValue = reserva.SalaId;
+        }
+
+        private void CarregarListaSalas()
+        {
+            var salas = _salaService.Consultar();
+
+            comboBoxSala.DataSource = null;
+
+            comboBoxSala.DisplayMember = "Nome";
+            comboBoxSala.ValueMember = "Id";
+
+            comboBoxSala.DataSource = salas;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -52,12 +67,15 @@ namespace SistemaReservas.Desktop.Screens
 
             if (selectedReserva == null)
             {
+                var dateInicio = new DateTime(dateTimeInicio.Value.Year, dateTimeInicio.Value.Month, dateTimeInicio.Value.Day, dateTimeInicio.Value.Hour, dateTimeInicio.Value.Minute, 0);
+                var dateFim = new DateTime(dateTimeFim.Value.Year, dateTimeFim.Value.Month, dateTimeFim.Value.Day, dateTimeFim.Value.Hour, dateTimeFim.Value.Minute, 0);
+
                 var reserva = new ReservaModel
                 {
                     Nome = textNome.Text,
-                    Inicio = dateTimeInicio.Value.ToUniversalTime(),
-                    Fim = dateTimeFim.Value.ToUniversalTime(),
-                    SalaId = (long)listBoxSala.SelectedValue
+                    Inicio = dateInicio.ToUniversalTime(),
+                    Fim = dateFim.ToUniversalTime(),
+                    SalaId = (long)comboBoxSala.SelectedValue
                 };
 
                 sucesso = _service.Criar(reserva, out erros);
@@ -66,9 +84,9 @@ namespace SistemaReservas.Desktop.Screens
             else
             {
                 selectedReserva.Nome = textNome.Text;
-                selectedReserva.Inicio = dateTimeInicio.Value.ToUniversalTime();
-                selectedReserva.Fim = dateTimeFim.Value.ToUniversalTime();
-                selectedReserva.SalaId = (long)listBoxSala.SelectedValue;
+                selectedReserva.Inicio = dateTimeInicio.Value.ToLocalTime();
+                selectedReserva.Fim = dateTimeFim.Value.ToLocalTime();
+                selectedReserva.SalaId = (long)comboBoxSala.SelectedValue;
                 sucesso = _service.Editar(selectedReserva, out erros);
                 message = "Reserva editada com sucesso";
             }
@@ -83,14 +101,6 @@ namespace SistemaReservas.Desktop.Screens
                 MessageBox.Show(string.Join("\n", erros.Select(e => e.ErrorMessage)), "Input Invalido",
                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-        }
-
-        private void CarregarListaSalas()
-        {
-            var salas = _salaService.Consultar();
-            listBoxSala.DataSource = salas;
-            listBoxSala.DisplayMember = "Nome";
-            listBoxSala.ValueMember = "Id";
         }
     }
 }

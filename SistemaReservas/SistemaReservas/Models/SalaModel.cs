@@ -11,13 +11,13 @@ namespace SistemaReservas.Models
     {
         [Required]
         public long Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "O nome da sala é obrigatório.")]
         public string Nome { get; set; } = String.Empty;
-        [Required]
-        [Range(1, int.MaxValue)]
+        [Required(ErrorMessage = "O andar é obrigatório.")]
+        [Range(1, int.MaxValue, ErrorMessage = "O andar deve ser um valor positivo maior que zero.")]
         public int Andar { get; set; }
-        [Required]
-        [Range(1, int.MaxValue)]
+        [Required(ErrorMessage = "A quantidade de assentos é obrigatória.")]
+        [Range(1, int.MaxValue, ErrorMessage = "A quantidade de assentos deve ser um valor positivo maior que zero.")]
         public int qtdAssentos { get; set; }
         public SalaStatusEnum Status { get; set; }
     }

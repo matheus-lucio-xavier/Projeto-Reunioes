@@ -16,6 +16,8 @@ namespace SistemaReservas.Desktop.Screens
     {
         private readonly SalaService _service;
         private int page = 1;
+        private string _pesquisa = "";
+        private bool _atualizandoPagina = false;
         public GerenciarSalas(SalaService service)
         {
             _service = service;
@@ -26,13 +28,9 @@ namespace SistemaReservas.Desktop.Screens
 
         private void CarregarDados()
         {
-            var salas = _service.Consultar(page);
+
+            var salas = string.IsNullOrEmpty(_pesquisa) ? _service.Consultar(page: page) : _service.Consultar(_pesquisa, page: page);
             CarregarDadosTabela(salas);
-        }
-        private void button2_Click(object sender, EventArgs e)
-        {
-            var resultado = _service.Consultar(textBox1.Text, page);
-            CarregarDadosTabela(resultado);
         }
         private void CarregarDadosTabela(List<ResponseSalaDto> lista)
         {
@@ -48,6 +46,20 @@ namespace SistemaReservas.Desktop.Screens
                     sala.ReunioesAgendadas
                 );
             }
+        }
+        private void DefinirPagina(int novaPagina)
+        {
+            _atualizandoPagina = true;
+            maskedTextBox1.Text = novaPagina.ToString();
+            _atualizandoPagina = false;
+            page = novaPagina;
+            CarregarDados();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            _pesquisa = textBox1.Text;
+            DefinirPagina(1);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -76,6 +88,8 @@ namespace SistemaReservas.Desktop.Screens
 
         private void MaskedTextBox1_TextChanged(object sender, EventArgs e)
         {
+            if (_atualizandoPagina) return;
+
             if (int.TryParse(maskedTextBox1.Text, out int newPage))
             {
                 if (newPage < 1 || newPage > Math.Ceiling((double)_service.Consultar().Count() / 10))
@@ -83,8 +97,7 @@ namespace SistemaReservas.Desktop.Screens
                     maskedTextBox1.Text = page.ToString();
                     return;
                 }
-                page = newPage;
-                CarregarDados();
+                DefinirPagina(newPage);
             }
         }
 
@@ -92,7 +105,7 @@ namespace SistemaReservas.Desktop.Screens
         {
             if (page < Math.Ceiling((double)_service.Consultar().Count() / 10))
             {
-                maskedTextBox1.Text = (page + 1).ToString();
+                DefinirPagina(page + 1);
             }
         }
 
@@ -100,7 +113,7 @@ namespace SistemaReservas.Desktop.Screens
         {
             if (page > 1)
             {
-                maskedTextBox1.Text = (page - 1).ToString();
+                DefinirPagina(page - 1);
             }
         }
 

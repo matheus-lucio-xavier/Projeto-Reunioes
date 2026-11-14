@@ -59,15 +59,5 @@ namespace SistemaReservas.Desktop.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Consulta um recurso localizado do tipo System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap _004eef55e164cde4b29b93bd64c6d468 {
-            get {
-                object obj = ResourceManager.GetObject("004eef55e164cde4b29b93bd64c6d468", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
     }
 }

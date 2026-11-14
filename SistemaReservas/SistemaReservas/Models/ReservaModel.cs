@@ -11,11 +11,11 @@ namespace SistemaReservas.Models
     {
         [Required]
         public long Id { get; set; }
-        [Required]
+        [Required(ErrorMessage = "O nome da reserva é obrigatório.")]
         public string Nome { get; set; } = String.Empty;
-        [Required]
+        [Required(ErrorMessage = "O horário de início é obrigatório.")]
         public DateTime Inicio { get; set; }
-        [Required]
+        [Required(ErrorMessage = "O horário de fim é obrigatório.")]
         public DateTime Fim { get; set; }
         [Required]
         public ReservaStatusEnum Status { get; set; }
@@ -32,7 +32,7 @@ namespace SistemaReservas.Models
                 );
             }
 
-            if (Inicio.TimeOfDay < new TimeSpan(8, 0, 0) || Fim.TimeOfDay > new TimeSpan(19, 0, 0))
+            if (Inicio.ToLocalTime().TimeOfDay < new TimeSpan(8, 0, 0) || Fim.ToLocalTime().TimeOfDay > new TimeSpan(19, 0, 0))
             {
                 yield return new ValidationResult(
                     "As reservas devem ocorrer entre 08:00 e 19:00.",

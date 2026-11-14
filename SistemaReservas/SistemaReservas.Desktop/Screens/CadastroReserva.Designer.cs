@@ -37,7 +37,7 @@
             dateTimeInicio = new DateTimePicker();
             dateTimeFim = new DateTimePicker();
             label4 = new Label();
-            listBoxSala = new ListBox();
+            comboBoxSala = new ComboBox();
             SuspendLayout();
             // 
             // button2
@@ -104,7 +104,7 @@
             dateTimeInicio.Name = "dateTimeInicio";
             dateTimeInicio.Size = new Size(362, 23);
             dateTimeInicio.TabIndex = 16;
-            dateTimeInicio.Value = new DateTime(2026, 11, 13, 12, 50, 56, 0);
+            dateTimeInicio.Value = new DateTime(2026, 11, 14, 0, 0, 0, 0);
             // 
             // dateTimeFim
             // 
@@ -114,7 +114,7 @@
             dateTimeFim.Name = "dateTimeFim";
             dateTimeFim.Size = new Size(362, 23);
             dateTimeFim.TabIndex = 17;
-            dateTimeFim.Value = new DateTime(2026, 11, 13, 12, 35, 37, 0);
+            dateTimeFim.Value = new DateTime(2026, 11, 14, 0, 0, 0, 0);
             // 
             // label4
             // 
@@ -125,20 +125,20 @@
             label4.TabIndex = 18;
             label4.Text = "Sala";
             // 
-            // listBoxSala
+            // comboBoxSala
             // 
-            listBoxSala.FormattingEnabled = true;
-            listBoxSala.Location = new Point(219, 302);
-            listBoxSala.Name = "listBoxSala";
-            listBoxSala.Size = new Size(362, 19);
-            listBoxSala.TabIndex = 19;
+            comboBoxSala.FormattingEnabled = true;
+            comboBoxSala.Location = new Point(219, 302);
+            comboBoxSala.Name = "comboBoxSala";
+            comboBoxSala.Size = new Size(362, 23);
+            comboBoxSala.TabIndex = 20;
             // 
             // CadastroReserva
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
-            Controls.Add(listBoxSala);
+            Controls.Add(comboBoxSala);
             Controls.Add(label4);
             Controls.Add(dateTimeFim);
             Controls.Add(dateTimeInicio);
@@ -165,6 +165,6 @@
         private DateTimePicker dateTimeInicio;
         private DateTimePicker dateTimeFim;
         private Label label4;
-        private ListBox listBoxSala;
+        private ComboBox comboBoxSala;
     }
 }

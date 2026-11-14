@@ -32,9 +32,9 @@ namespace SistemaReservas.Services
             var salas = page != 0 ?
                 _repository.Consultar<SalaModel>()
                     .Where(s => s.Status == SalaStatusEnum.ATIVA)
+                    .OrderBy(x => x.Andar)
                     .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
-                    .OrderBy(x => x.Andar) :
+                    .Take(pageSize) :
                 _repository.Consultar<SalaModel>()
                     .Where(s => s.Status == SalaStatusEnum.ATIVA)
                     .OrderBy(x => x.Andar);
@@ -64,9 +64,9 @@ namespace SistemaReservas.Services
             var salas = page != 0 ?
                 _repository.Consultar<SalaModel>()
                     .Where(s => s.Nome.Contains(pesquisa) && s.Status == SalaStatusEnum.ATIVA)
+                    .OrderBy(x => x.Andar)
                     .Skip((page - 1) * pageSize)
-                    .Take(pageSize)
-                    .OrderBy(x => x.Andar) :
+                    .Take(pageSize) :
                 _repository.Consultar<SalaModel>()
                     .Where(s => s.Nome.Contains(pesquisa) && s.Status == SalaStatusEnum.ATIVA)
                     .OrderBy(x => x.Andar);
@@ -85,7 +85,7 @@ namespace SistemaReservas.Services
                     Nome = s.Nome,
                     Andar = s.Andar,
                     qtdAssentos = s.qtdAssentos,
-                    HorasLivres = (7 * 11) - reservas.Where(r => r.SalaId == s.Id).Sum(r => (r.Fim - r.Inicio).TotalMinutes) / 60,
+                    HorasLivres = Math.Round((7 * 11) - reservas.Where(r => r.SalaId == s.Id).Sum(r => (r.Fim - r.Inicio).TotalMinutes) / 60, 2),
                     ReunioesAgendadas = reservas.Where(r => r.SalaId == s.Id).Count()
                 }
             ).ToList();
@@ -141,11 +141,29 @@ namespace SistemaReservas.Services
             return _repository.Excluir(sala);
         }
 
+        private bool VerificarRepetido(SalaModel sala)
+        {
+            return _repository.Consultar<SalaModel>().Any(s =>
+                s.Id != sala.Id &&
+                s.Nome == sala.Nome
+            );
+        }
+
         public bool Validar(SalaModel sala, out List<ValidationResult> erros)
         {
             var context = new ValidationContext(sala);
             erros = new List<ValidationResult>();
-            return Validator.TryValidateObject(sala, context, erros, true);
+
+            Validator.TryValidateObject(sala, context, erros, true);
+
+            if (VerificarRepetido(sala))
+            {
+                erros.Add(new ValidationResult(
+                    "Já existe uma sala com esse nome."
+                ));
+            }
+
+            return erros.Count == 0;
         }
     }
 }

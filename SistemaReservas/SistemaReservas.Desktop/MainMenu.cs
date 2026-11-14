@@ -25,5 +25,10 @@ namespace SistemaReservas.Desktop
             GerenciarReservas gerenciarReservas = new GerenciarReservas(_reservaService, _salaService);
             gerenciarReservas.ShowDialog();
         }
+
+        private void MainMenu_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

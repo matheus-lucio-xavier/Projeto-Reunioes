@@ -18,6 +18,8 @@ namespace SistemaReservas.Desktop.Screens
         private readonly ReservaService _service;
         private readonly SalaService _salaService;
         private int page = 1;
+        private string _pesquisa = "";
+        private bool _atualizandoPagina = false;
         public GerenciarReservas(ReservaService service, SalaService salaService)
         {
             InitializeComponent();
@@ -28,13 +30,7 @@ namespace SistemaReservas.Desktop.Screens
         }
         private void CarregarDados()
         {
-            var reservas = _service.Consultar(page);
-            CarregarDadosTabela(reservas);
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            var reservas = _service.Consultar(textBox1.Text, page);
+            var reservas = string.IsNullOrEmpty(_pesquisa) ? _service.Consultar(page) : _service.Consultar(_pesquisa, page);
             CarregarDadosTabela(reservas);
         }
         private void CarregarDadosTabela(List<ReservaModel> lista)
@@ -54,6 +50,20 @@ namespace SistemaReservas.Desktop.Screens
                     reserva.Status
                 );
             }
+        }
+        private void DefinirPagina(int novaPagina)
+        {
+            _atualizandoPagina = true;
+            maskedTextBox1.Text = novaPagina.ToString();
+            _atualizandoPagina = false;
+            page = novaPagina;
+            CarregarDados();
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+            _pesquisa = textBox1.Text;
+            DefinirPagina(1);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -89,6 +99,7 @@ namespace SistemaReservas.Desktop.Screens
 
         private void MaskedTextBox1_TextChanged(object sender, EventArgs e)
         {
+            if (_atualizandoPagina) return;
             if (int.TryParse(maskedTextBox1.Text, out int newPage))
             {
 
@@ -97,8 +108,7 @@ namespace SistemaReservas.Desktop.Screens
                     maskedTextBox1.Text = page.ToString();
                     return;
                 }
-                page = newPage;
-                CarregarDados();
+                DefinirPagina(newPage);
             }
         }
 
@@ -106,7 +116,7 @@ namespace SistemaReservas.Desktop.Screens
         {
             if (page < Math.Ceiling((double)_service.Consultar().Count() / 10))
             {
-                maskedTextBox1.Text = (page + 1).ToString();
+                DefinirPagina(page + 1);
             }
         }
 
@@ -114,7 +124,7 @@ namespace SistemaReservas.Desktop.Screens
         {
             if (page > 1)
             {
-                maskedTextBox1.Text = (page - 1).ToString();
+                DefinirPagina(page - 1);
             }
         }
 
