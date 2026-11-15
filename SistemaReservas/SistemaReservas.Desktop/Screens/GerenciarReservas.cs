@@ -28,10 +28,12 @@ namespace SistemaReservas.Desktop.Screens
             CarregarDados();
             maskedTextBox1.Text = page.ToString();
         }
+
         private void CarregarDados()
         {
             var reservas = string.IsNullOrEmpty(_pesquisa) ? _service.Consultar(page) : _service.Consultar(_pesquisa, page);
             CarregarDadosTabela(reservas);
+
         }
         private void CarregarDadosTabela(List<ReservaModel> lista)
         {
@@ -130,6 +132,13 @@ namespace SistemaReservas.Desktop.Screens
 
         private void button3_Click(object sender, EventArgs e)
         {
+            if (_service.Consultar().Count() == 0)
+            {
+                MessageBox.Show("Nenhuma reserva encontrada.", "Informação",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             var selectedReservaId = dataGridView1.SelectedRows[0].Cells["Id"].Value;
             if (selectedReservaId == null)
             {
@@ -149,9 +158,13 @@ namespace SistemaReservas.Desktop.Screens
 
             if (selectedReserva.Status == ReservaStatusEnum.CANCELADA)
             {
-                MessageBox.Show("Não é possível cancelar uma reserva que já está cancelada.", "Input Invalido",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                if (MessageBox.Show("Tem certeza que deseja Excluir esta reserva?", "Confirmar Exclusão", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    selectedReserva.Inicio = selectedReserva.Inicio.ToUniversalTime();
+                    selectedReserva.Fim = selectedReserva.Fim.ToUniversalTime();
+                    _service.Deletar(selectedReserva);
+                    CarregarDados();
+                }
             }
 
             if (MessageBox.Show("Tem certeza que deseja Cancelar esta reserva?", "Confirmar Cancelamento", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
@@ -165,6 +178,13 @@ namespace SistemaReservas.Desktop.Screens
 
         private void button4_Click(object sender, EventArgs e)
         {
+            if (_service.Consultar().Count() == 0)
+            {
+                MessageBox.Show("Nenhuma reserva encontrada.", "Informação",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             var selectedReservaId = dataGridView1.SelectedRows[0].Cells["Id"].Value;
             if (selectedReservaId == null)
             {
@@ -186,6 +206,21 @@ namespace SistemaReservas.Desktop.Screens
             if (editarReserva.ShowDialog() == DialogResult.OK)
             {
                 CarregarDados();
+            }
+        }
+
+        private void dataGridView1_Click(object sender, EventArgs e)
+        {
+            var selectedReservaStatus = dataGridView1.SelectedRows[0].Cells["Status"].Value;
+            if (selectedReservaStatus == null) { return; }
+
+            if (selectedReservaStatus.ToString() == "CANCELADA")
+            {
+                button3.Text = "Excluir Reserva";
+            }
+            else
+            {
+                button3.Text = "Cancelar Reserva";
             }
         }
     }

@@ -15,9 +15,9 @@ namespace SistemaReservas.Repositories
             _context = appDbContext;
         }
 
-        public IQueryable<T> Consultar<T>() where T : class
+        public  IQueryable<T> Consultar<T>() where T : class
         {
-            return _context.Set<T>().AsQueryable(); 
+            return _context.Set<T>().AsQueryable();
         }
 
         public T? ConsultarPorId<T>(long id) where T : class
@@ -43,6 +43,17 @@ namespace SistemaReservas.Repositories
         {
             _context.Set<T>().Remove(model);
             _context.SaveChanges();
+            return true;
+        }
+
+        public bool SalvarAlteracoes()
+        {
+            _context.SaveChanges();
+            return true;
+        }
+        public async Task<bool> SalvarAlteracoesAsync()
+        {
+            await _context.SaveChangesAsync();
             return true;
         }
     }

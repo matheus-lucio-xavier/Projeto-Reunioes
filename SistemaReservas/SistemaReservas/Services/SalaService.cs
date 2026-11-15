@@ -31,18 +31,16 @@ namespace SistemaReservas.Services
 
             var salas = page != 0 ?
                 _repository.Consultar<SalaModel>()
-                    .Where(s => s.Status == SalaStatusEnum.ATIVA)
                     .OrderBy(x => x.Andar)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize) :
                 _repository.Consultar<SalaModel>()
-                    .Where(s => s.Status == SalaStatusEnum.ATIVA)
                     .OrderBy(x => x.Andar);
 
             var reservas = _repository.Consultar<ReservaModel>()
-                .Where(r => 
-                    r.Inicio < DateTime.Today.ToUniversalTime() &&
-                    r.Fim > DateTime.Today.AddDays(-7).ToUniversalTime() &&
+                .Where(r =>
+                    r.Inicio < DateTime.Today.AddDays(1).ToUniversalTime() &&
+                    r.Fim > DateTime.Today.AddDays(-6).ToUniversalTime() &&
                     r.Status != ReservaStatusEnum.CANCELADA);
 
             var resultado = salas.Select(s =>
@@ -63,19 +61,19 @@ namespace SistemaReservas.Services
         {
             var salas = page != 0 ?
                 _repository.Consultar<SalaModel>()
-                    .Where(s => s.Nome.Contains(pesquisa) && s.Status == SalaStatusEnum.ATIVA)
+                    .Where(s => s.Nome.Contains(pesquisa))
                     .OrderBy(x => x.Andar)
                     .Skip((page - 1) * pageSize)
                     .Take(pageSize) :
                 _repository.Consultar<SalaModel>()
-                    .Where(s => s.Nome.Contains(pesquisa) && s.Status == SalaStatusEnum.ATIVA)
+                    .Where(s => s.Nome.Contains(pesquisa))
                     .OrderBy(x => x.Andar);
 
 
             var reservas = _repository.Consultar<ReservaModel>()
-                .Where(r => 
-                    r.Inicio < DateTime.Today.ToUniversalTime() &&
-                    r.Fim > DateTime.Today.AddDays(-7).ToUniversalTime() &&
+                .Where(r =>
+                    r.Inicio < DateTime.Today.AddDays(1).ToUniversalTime() &&
+                    r.Fim > DateTime.Today.AddDays(-6).ToUniversalTime() &&
                     r.Status != ReservaStatusEnum.CANCELADA);
 
             var resultado = salas.Select(s =>
@@ -125,20 +123,32 @@ namespace SistemaReservas.Services
             return _repository.Editar(sala);
         }
 
-        public bool Deletar(SalaModel sala)
+        public async Task<bool> Deletar(SalaModel sala)
         {
-            if (sala.Status == SalaStatusEnum.ATIVA)
-            {
-                foreach(var r in _repository.Consultar<ReservaModel>().Where(r => r.SalaId == sala.Id && r.Status != ReservaStatusEnum.CANCELADA))
-                {
-                    r.Status = ReservaStatusEnum.CANCELADA;
-                    return _repository.Editar(r);
-                }
-
-                sala.Status = SalaStatusEnum.INATIVA;
-                return _repository.Editar(sala);
-            }
+            await InativarSala(sala.Id);
+                
             return _repository.Excluir(sala);
+        }
+
+        public async Task InativarSala(long salaId)
+        {
+            var sala = await _repository.Consultar<SalaModel>()
+                .FirstOrDefaultAsync(s => s.Id == salaId);
+
+            if (sala == null)
+                throw new Exception("Sala não encontrada.");
+
+            var reservas = await _repository.Consultar<ReservaModel>()
+                .Where(r => r.SalaId == salaId &&
+                            r.Status != ReservaStatusEnum.CANCELADA)
+                .ToListAsync();
+
+            foreach (var reserva in reservas)
+            {
+                reserva.Status = ReservaStatusEnum.CANCELADA;
+            }
+
+            await _repository.SalvarAlteracoesAsync();
         }
 
         private bool VerificarRepetido(SalaModel sala)

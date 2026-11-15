@@ -83,9 +83,12 @@ namespace SistemaReservas.Desktop.Screens
             }
             else
             {
+                var dateInicio = new DateTime(dateTimeInicio.Value.Year, dateTimeInicio.Value.Month, dateTimeInicio.Value.Day, dateTimeInicio.Value.Hour, dateTimeInicio.Value.Minute, 0);
+                var dateFim = new DateTime(dateTimeFim.Value.Year, dateTimeFim.Value.Month, dateTimeFim.Value.Day, dateTimeFim.Value.Hour, dateTimeFim.Value.Minute, 0);
+
                 selectedReserva.Nome = textNome.Text;
-                selectedReserva.Inicio = dateTimeInicio.Value.ToLocalTime();
-                selectedReserva.Fim = dateTimeFim.Value.ToLocalTime();
+                selectedReserva.Inicio = dateInicio.ToUniversalTime();
+                selectedReserva.Fim = dateFim.ToUniversalTime();
                 selectedReserva.SalaId = (long)comboBoxSala.SelectedValue;
                 sucesso = _service.Editar(selectedReserva, out erros);
                 message = "Reserva editada com sucesso";

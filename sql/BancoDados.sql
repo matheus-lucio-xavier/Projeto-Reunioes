@@ -2,8 +2,7 @@ CREATE TABLE Salas (
     Id SERIAL PRIMARY KEY,
     Nome VARCHAR(100) NOT NULL UNIQUE,
     Andar INTEGER NOT NULL,
-    QtdAssentos INTEGER NOT NULL,
-    Status INTEGER NOT NULL
+    QtdAssentos INTEGER NOT NULL
 );
 
 CREATE TABLE Reservas (

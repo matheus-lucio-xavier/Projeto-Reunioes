@@ -26,10 +26,10 @@ namespace SistemaReservas.Desktop.Screens
             maskedTextBox1.Text = page.ToString();
         }
 
-        private void CarregarDados()
+        private async void CarregarDados()
         {
 
-            var salas = string.IsNullOrEmpty(_pesquisa) ? _service.Consultar(page: page) : _service.Consultar(_pesquisa, page: page);
+            var salas =  await Task.FromResult(string.IsNullOrEmpty(_pesquisa) ? _service.Consultar(page: page) : _service.Consultar(_pesquisa, page: page));
             CarregarDadosTabela(salas);
         }
         private void CarregarDadosTabela(List<ResponseSalaDto> lista)
@@ -119,6 +119,13 @@ namespace SistemaReservas.Desktop.Screens
 
         private void button4_Click(object sender, EventArgs e)
         {
+            if (_service.Consultar().Count() == 0)
+            {
+                MessageBox.Show("Nenhuma sala encontrada.", "Informação",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             var selectedSalaId = dataGridView1.SelectedRows[0].Cells["Id"].Value;
             if (selectedSalaId == null)
             {
@@ -143,8 +150,15 @@ namespace SistemaReservas.Desktop.Screens
             }
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private async void button3_Click(object sender, EventArgs e)
         {
+            if (_service.Consultar().Count() == 0)
+            {
+                MessageBox.Show("Nenhuma sala encontrada.", "Informação",
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
             var selectedSalaId = dataGridView1.SelectedRows[0].Cells["Id"].Value;
             if (selectedSalaId == null)
             {
@@ -164,7 +178,7 @@ namespace SistemaReservas.Desktop.Screens
 
             if (MessageBox.Show("Tem certeza que deseja excluir esta sala?", "Confirmar Exclusão", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
             {
-                _service.Deletar(selectedSala);
+                await _service.Deletar(selectedSala);
                 CarregarDados();
             }
         }

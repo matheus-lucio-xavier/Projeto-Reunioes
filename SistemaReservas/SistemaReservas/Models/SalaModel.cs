@@ -19,6 +19,5 @@ namespace SistemaReservas.Models
         [Required(ErrorMessage = "A quantidade de assentos é obrigatória.")]
         [Range(1, int.MaxValue, ErrorMessage = "A quantidade de assentos deve ser um valor positivo maior que zero.")]
         public int qtdAssentos { get; set; }
-        public SalaStatusEnum Status { get; set; }
     }
 }

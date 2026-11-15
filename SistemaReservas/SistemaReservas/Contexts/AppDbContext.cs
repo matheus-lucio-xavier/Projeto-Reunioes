@@ -32,7 +32,6 @@ namespace SistemaReservas.Contexts
             entitySala.Property(s => s.Nome).HasColumnName("nome");
             entitySala.Property(s => s.Andar).HasColumnName("andar");
             entitySala.Property(s => s.qtdAssentos).HasColumnName("qtdassentos");
-            entitySala.Property(s => s.Status).HasColumnName("status");
             entitySala.HasKey(s => s.Id);
 
             entityReserva.ToTable("reservas");

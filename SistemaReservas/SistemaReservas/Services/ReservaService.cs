@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using SistemaReservas.Contexts;
 using SistemaReservas.Enums;
 using SistemaReservas.Models;
@@ -25,7 +26,7 @@ namespace SistemaReservas.Services
             _repository = repository;
         }
 
-        public List<ReservaModel> Consultar(int page = 0, int pageSize = 10)
+        public  List<ReservaModel> Consultar(int page = 0, int pageSize = 10)
         {
             var resultado = page != 0 ?
                 _repository.Consultar<ReservaModel>()

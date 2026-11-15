@@ -84,6 +84,7 @@
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(555, 320);
             dataGridView1.TabIndex = 3;
+            dataGridView1.Click += dataGridView1_Click;
             // 
             // Id
             // 
